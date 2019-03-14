@@ -1,5 +1,8 @@
 package myspringboot.ch2;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -20,5 +23,18 @@ public class SingletonService {
 		this.another = another;
 	}
 	
+	public SingletonService(){
+		System.out.println("我要被实例化了！");
+	}
+	
+//	@PostConstruct
+	public void init(){
+		System.out.println("我跟在构造函数后执行。。。");
+	}
+	
+//	@PreDestroy
+	public void destroy(){
+		System.out.println("我会在Bean销毁前执行。。。");
+	}
 	
 }

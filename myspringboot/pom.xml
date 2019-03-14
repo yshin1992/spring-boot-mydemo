@@ -53,6 +53,12 @@
 			<artifactId>mchange-commons-java</artifactId>
 			<version>0.2.9</version>
 		</dependency>
+		<!-- 增加对JSR250的支持，使其能够支持PostConstructor等注解 -->
+		<dependency>
+			<groupId>javax.annotation</groupId>
+			<artifactId>jsr250-api</artifactId>
+			<version>1.0</version>
+		</dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>

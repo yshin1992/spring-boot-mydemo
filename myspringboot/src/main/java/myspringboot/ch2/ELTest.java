@@ -5,6 +5,7 @@ import java.io.IOException;
 import junit.framework.TestCase;
 
 import org.apache.commons.io.IOUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +13,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
 
 @ComponentScan(basePackages={"myspringboot.ch2"})
@@ -38,6 +40,9 @@ public class ELTest extends TestCase {
 	@Value("#{T (java.lang.Math).random()*100}")
 	private Double randomDouble;
 	
+	@Autowired
+	private Environment environment;
+	
 	@Bean //这里强调一下 要使配置文件的内容生效，必须配置此Bean 而且必须是static
 	public static PropertySourcesPlaceholderConfigurer propertyConfigurer(){
 		return new PropertySourcesPlaceholderConfigurer();
@@ -53,6 +58,7 @@ public class ELTest extends TestCase {
 		System.out.println("osName = "+test.osName);
 		System.out.println("randomDouble=" +test.randomDouble);
 		System.out.println("Baidu="+IOUtils.toString(test.baiduUrl.getInputStream()));
+		System.out.println("从environment中读取数据："+test.environment.getProperty("driverClass"));
 		ctx.close();
 	}
 }
