@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+	   xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+				           http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+				           http://www.springframework.org/schema/aop  http://www.springframework.org/schema/aop/spring-aop.xsd
+				           http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+				           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+	<bean id="greeting" class="myspringboot.ch1.aop.GreetingImpl">
+	</bean>
+	
+	<bean id="greetingBeforeAndAfterAdvice" class="myspringboot.ch1.aop.GreetingBeforeAndAfterAdvice">
+	</bean>
+
+	<bean id="greetingAroundAdvice" class="myspringboot.ch1.aop.GreetingAroundAdvice">
+	</bean>
+	
+	<bean id="greetingProxy" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="target" ref="greeting"></property>
+		<property name="interceptorNames" value="greetingAroundAdvice,greetingBeforeAndAfterAdvice"></property>
+	</bean>
+	
+	<bean id="loveAdvice" class="myspringboot.ch1.aop.LoveAdvice">
+	</bean>
+	<bean id="greetingIntroductionProxy" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="targetName" value="greeting"></property>
+		<property name="interfaces" value="myspringboot.ch1.aop.Love,myspringboot.ch1.aop.Greeting"></property>
+		<property name="interceptorNames" value="loveAdvice,greetingAroundAdvice,greetingBeforeAndAfterAdvice"></property>
+		<property name="proxyTargetClass" value="true"></property>
+	</bean>
+	
+	<!-- 这里做一个Dao执行方法的切面，当执行Dao的方法时，将方法名和参数以及返回结果打印出来 -->
+	<bean id="memberDao" class="org.ysh.p2p.dao.impl.MemberDaoImpl"></bean>
+	<bean id="daoAdvice" class="myspringboot.ch1.aop.DaoAroundAdvice"></bean>
+	<bean id="memberDaoProxy" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="target" ref="memberDao"></property>
+		<property name="interceptorNames" value="daoAdvice"></property>
+	</bean>
+	
+	<!-- 上面的写法，如果是只有个别的类需要增强还好，但是像Dao这样的有很多，还是一个个写的话这样就很不合适了 -->
+	<bean id="daoAdvisor" class="org.springframework.aop.support.RegexpMethodPointcutAdvisor">
+		<property name="advice" ref="daoAdvice"></property>
+		<property name="pattern" value="org.ysh.p2p.dao.impl.*.*(..)"></property>
+	</bean>
+	<!-- 交由Spring自动生成代理  -->
+	<bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator">
+		<property name="optimize" value="true"></property>
+	</bean>
+</beans>
