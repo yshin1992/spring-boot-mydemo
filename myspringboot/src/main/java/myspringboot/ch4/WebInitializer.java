@@ -15,9 +15,11 @@ import org.springframework.web.servlet.DispatcherServlet;
  * @author yshin1992
  *
  */
-public class WebInitializer implements WebApplicationInitializer {
+public class WebInitializer 
+ implements WebApplicationInitializer 
 
-	@Override
+{
+	
 	public void onStartup(ServletContext servletContext)
 			throws ServletException {
 		AnnotationConfigWebApplicationContext ctx = new AnnotationConfigWebApplicationContext();
@@ -25,6 +27,8 @@ public class WebInitializer implements WebApplicationInitializer {
 		Dynamic servlet = servletContext.addServlet("dispatcher", new DispatcherServlet(ctx));
 		servlet.addMapping("/");
 		servlet.setLoadOnStartup(1);
+		
+		servlet.setAsyncSupported(true);//开启异步方法支持
 	}
 
 }

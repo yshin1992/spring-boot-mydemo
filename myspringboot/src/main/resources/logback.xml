@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+	<property name="LOGHOME" value="E:/develop/apache-tomcat-7.0.75/logs" />
+	<!-- 输出日志到控制台 -->
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<Encoding>UTF-8</Encoding>
+		<encoder>
+			<pattern>%d{HH:mm:ss}[%-5level][%file:%line] %msg%n</pattern>
+		</encoder>
+		<!-- 不输出定时器输出的日志 -->
+		<filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+		</filter>
+	</appender>
+
+	<root level="ERROR">
+		<appender-ref ref="STDOUT" />
+	</root>
+	<!--additivity禁止向上传递 -->
+
+</configuration>
+
